@@ -5,4 +5,4 @@ node_modules
 .DS_Store
 docs/api/
 dist/
-example_project/
+example_project/**
