@@ -15,25 +15,28 @@ Genera documentación técnica profesional en PDF a partir de Controllers de Spr
 - VS Code 1.96.0 o superior.
 - Una clave de API de OpenAI (opcional, para mejoras con IA).
 
-## Configuración
+## Configuración de la IA (Importante)
 
-Se recomienda usar un archivo `.env` en la raíz de tu proyecto para configurar la conexión con el proveedor de IA.
+Para que la extensión mejore la documentación usando Inteligencia Artificial, necesitas configurar tu API Key. Tienes **dos opciones**:
 
-1. Crea un archivo `.env` en la raíz de tu proyecto.
-2. Copia el contenido de `.env.example`:
+### Opción A: Configuración Visual (Recomendada)
+1. En VS Code, ve a **File > Preferences > Settings** (o presiona `Ctrl+,`).
+2. Busca **"Swagger PDF"** en la barra de búsqueda.
+3. Ingresa tu **Api Key**, **Model** (ej: `gpt-4-turbo`) y **Provider**.
+
+### Opción B: Archivo `.env` (Para proyectos específicos)
+Crea un archivo llamado `.env` en la raíz de tu proyecto y agrega las variables:
 
 ```env
 SWAGGER_PDF_AI_PROVIDER=openai
-SWAGGER_PDF_AI_API_KEY=tu_api_key_aqui
+SWAGGER_PDF_AI_API_KEY=sk-proj-tu-api-key-aqui...
 SWAGGER_PDF_AI_MODEL=gpt-4-turbo
-SWAGGER_PDF_AI_BASE_URL=
-SWAGGER_PDF_OUTPUT_DIR=./docs/api/
+SWAGGER_PDF_AI_BASE_URL=https://api.openai.com/v1
+SWAGGER_PDF_OUTPUT_DIR=docs/api
 ```
 
-- **SWAGGER_PDF_AI_BASE_URL**: URL base si usas un proxy o proveedor compatible con OpenAI (opcional).
-- **SWAGGER_PDF_OUTPUT_DIR**: Carpeta donde se guardarán los PDFs generados (relativa al proyecto).
-
-La configuración de VS Code queda como respaldo si no existe el `.env`.
+> **Nota:** La configuración visual tiene prioridad si ambos existen.
+> **Seguridad:** Nunca subas tu archivo `.env` o tus API Keys a repositorios públicos.
 
 ## Uso
 

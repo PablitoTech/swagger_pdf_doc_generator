@@ -29,17 +29,22 @@ export class AIService {
             }
         }
 
-        // 2. Read from env or fallback (maybe? User said it MUST be in .env, so we prioritize that)
-        const providerType = envConfig['SWAGGER_PDF_AI_PROVIDER'] || 'openai';
-        const apiKey = envConfig['SWAGGER_PDF_AI_API_KEY'];
-        const model = envConfig['SWAGGER_PDF_AI_MODEL'] || 'gpt-4-turbo';
-        const baseUrl = envConfig['SWAGGER_PDF_AI_BASE_URL'];
+        // 2. Read from VS Code Settings (Priority 1)
+        const config = vscode.workspace.getConfiguration('swagger-pdf-generator');
+        const settingsProvider = config.get<string>('aiProvider');
+        const settingsApiKey = config.get<string>('apiKey');
+        const settingsModel = config.get<string>('model');
+        const settingsBaseUrl = config.get<string>('baseUrl');
+
+        // 3. fallback to .env (Priority 2)
+        const providerType = settingsProvider || envConfig['SWAGGER_PDF_AI_PROVIDER'] || 'openai';
+        const apiKey = settingsApiKey || envConfig['SWAGGER_PDF_AI_API_KEY'];
+        const model = settingsModel || envConfig['SWAGGER_PDF_AI_MODEL'] || 'gpt-4-turbo';
+        const baseUrl = settingsBaseUrl || envConfig['SWAGGER_PDF_AI_BASE_URL'];
 
         if (!apiKey && providerType !== 'custom_http') {
-            // Check VS Code Config as absolute fallback or just warn?
-            // "deben estar en un archivo .env" implies strong preference.
-            // But let's check one last time in legacy config to be safe, or just log.
-            console.warn('No SWAGGER_PDF_AI_API_KEY found in .env');
+            // Just warn if missing, but don't block basic generation (PDF without AI)
+            console.warn('No SWAGGER_PDF_AI_API_KEY found in settings or .env');
             return;
         }
 

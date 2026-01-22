@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as dotenv from 'dotenv';
 import { JavaParser } from './parser/JavaParser';
 import { AIService } from './services/AIService';
 import { PDFGenerator } from './services/PDFGenerator';
@@ -63,8 +64,24 @@ async function handleGeneration(
             }
 
             // Output Config
+            // Output Config logic: Settings > .env > Default
             const config = vscode.workspace.getConfiguration('swagger-pdf-generator');
-            let outputDir = config.get<string>('outputDirectory') || './docs/api/';
+            let outputDir = config.get<string>('outputDirectory');
+
+            // Load .env if not found in settings or to check for env var override (optional strategy, but let's stick to precedence)
+            // Actually, we usually want .env to be able to override default settings?
+            // But standard VSCode extension behavior is Settings > Environment.
+            // However, since we support .env for this specific extension...
+
+            // Let's load .env anyway
+            if (vscode.workspace.workspaceFolders) {
+                const envPath = path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, '.env');
+                dotenv.config({ path: envPath });
+            }
+
+            if (!outputDir) {
+                outputDir = process.env.SWAGGER_PDF_OUTPUT_DIR || 'docs/api';
+            }
 
             // Resolve relative path against workspace folder
             const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);

@@ -44,10 +44,33 @@
       "type": "object",
       "title": "Swagger PDF Generator",
       "properties": {
+        "swagger-pdf-generator.aiProvider": {
+          "type": "string",
+          "default": "openai",
+          "enum": [
+            "openai"
+          ],
+          "description": "Provider for AI enhancement (e.g., openai)."
+        },
+        "swagger-pdf-generator.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API Key for the AI provider. Leave empty to use .env file."
+        },
+        "swagger-pdf-generator.model": {
+          "type": "string",
+          "default": "gpt-4-turbo",
+          "description": "AI Model to use (e.g., gpt-4-turbo)."
+        },
+        "swagger-pdf-generator.baseUrl": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "Base URL for the AI API."
+        },
         "swagger-pdf-generator.outputDirectory": {
           "type": "string",
-          "default": "./docs/api/",
-          "description": "Output directory for generated PDFs."
+          "default": "docs/api",
+          "description": "Directory to save generated PDFs. Relative to workspace root."
         }
       }
     }
